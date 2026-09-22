@@ -1,66 +1,117 @@
-# C++ Vecto Class (OOP)
+# Vector Operations Library
 
-Chương trình triển khai lớp đối tượng `Vecto` (Vector n chiều) trong C++ hỗ trợ cấp phát bộ nhớ động, quản lý tài nguyên an toàn theo chuẩn C++ (Rule of Three) và nạp chồng các toán tử cơ bản.
+A robust C++ implementation of an n-dimensional mathematical vector class featuring dynamic memory management, exception-safe resource handling, and comprehensive operator overloading.
 
----
+## Key Features
 
-## 📌 Tính năng chính
+- **Dynamic Dimension Support**: Supports runtime configuration of vector dimensionality with heap allocation.
+- **Rule of Three Compliance**: Implements custom destructor, copy constructor, and copy assignment operator ensuring deep copying and zero memory leaks.
+- **Exception-Safe Design**: Incorporates the copy-and-swap idiom for strong exception safety during assignment operations.
+- **Arithmetic Overloading**: Provides intuitive vector operations including addition, subtraction, and dot product (scalar multiplication).
+- **Safe Element Access**: Implements subscript operators (`[]`) with bounds checking throwing standard exceptions upon invalid access.
+- **Robust Error Handling**: Throws `std::invalid_argument` on dimension mismatches and `std::out_of_range` on index violations.
 
-- **Quản lý bộ nhớ động**: Khởi tạo vector với số chiều linh hoạt, giải phóng vùng nhớ tự động tránh rò rỉ bộ nhớ (Memory Leak).
-- **Copy Constructor & Copy Assignment Operator**: Áp dụng idiom Copy-and-Swap để sao chép sâu (Deep Copy) và gán đối tượng an toàn.
-- **Nạp chồng toán tử đại số**:
-  - `+`, `-`: Phép cộng, trừ hai vector cùng số chiều.
-  - `*`: Tích vô hướng (dot product) giữa hai vector.
-- **Truy cập phần tử qua chỉ mục**: Nạp chồng toán tử `[]` (cả bản non-const để sửa giá trị và const để đọc dữ liệu an toàn) có bắt lỗi vượt biên mảng (`std::out_of_range`).
-- **Xử lý ngoại lệ (Exception Handling)**: Bắt lỗi lệch số chiều, vector rỗng hoặc chỉ số ngoài phạm vi bằng ngoại lệ chuẩn C++ (`std::invalid_argument`, `std::out_of_range`).
+## Project Structure
 
----
-
-## 📁 Cấu trúc thư mục
-
-```
-├── Vecto.h        # Khai báo lớp Vecto và các nguyên mẫu phương thức / toán tử
-├── Vecto.cpp      # Định nghĩa chi tiết các phương thức và nạp chồng toán tử
-├── main.cpp       # Mã kiểm thử tính năng (nhập, xuất, tính toán, bắt ngoại lệ)
-└── README.md      # Tài liệu hướng dẫn sử dụng
+```text
+.
+├── Vecto.h        # Class declaration, method prototypes, and operator interfaces
+├── Vecto.cpp      # Implementation of member methods and operator overloads
+├── main.cpp       # Demonstration program and test driver
+├── .gitignore     # Git ignore rules for build artifacts
+└── README.md      # Technical project documentation
 ```
 
----
+## API Reference
 
-## 🛠️ Hướng dẫn biên dịch và chạy
+### Constructors and Destructor
 
-Sử dụng trình biên dịch GCC/G++:
+| Signature | Description |
+| :--- | :--- |
+| `Vecto(int dim = 0)` | Constructs a zero-initialized vector of dimension `dim`. |
+| `Vecto(const Vecto& v)` | Copy constructor. Allocates independent memory and performs deep copy. |
+| `~Vecto()` | Destructor. Deallocates dynamically allocated memory. |
 
-### 1. Biên dịch:
+### Member Functions
+
+| Signature | Description |
+| :--- | :--- |
+| `void Nhap()` | Reads vector dimension and coordinates from standard input. Cleans existing data first. |
+| `void Xuat() const` | Outputs vector coordinates to standard output. Prints "Vecto rong" if empty. |
+
+### Operator Overloads
+
+| Signature | Return Type | Description |
+| :--- | :--- | :--- |
+| `operator+(const Vecto& b) const` | `Vecto` | Element-wise vector addition. Throws `std::invalid_argument` on dimension mismatch or empty state. |
+| `operator-(const Vecto& b) const` | `Vecto` | Element-wise vector subtraction. Throws `std::invalid_argument` on dimension mismatch or empty state. |
+| `operator*(const Vecto& b) const` | `double` | Computes the scalar dot product. Throws `std::invalid_argument` on dimension mismatch or empty state. |
+| `operator=(const Vecto& other)` | `Vecto&` | Deep copies using copy-and-swap semantics. |
+| `operator[](int index)` | `double&` | Mutable subscript access. Throws `std::out_of_range` if index is out of bounds. |
+| `operator[](int index) const` | `const double&` | Read-only subscript access. Throws `std::out_of_range` if index is out of bounds. |
+
+## Build and Run
+
+### Prerequisites
+
+- GCC / G++ (supporting C++11 or later)
+- Make (optional)
+
+### Compilation
+
+Compile the project files using `g++`:
+
 ```bash
-g++ main.cpp Vecto.cpp -o VectoProgram -std=c++11
+g++ -std=c++17 -Wall -Wextra -O2 main.cpp Vecto.cpp -o vector_program
 ```
 
-### 2. Thực thi:
-- **Trên Linux / macOS:**
-  ```bash
-  ./VectoProgram
-  ```
-- **Trên Windows (cmd / PowerShell):**
-  ```cmd
-  VectoProgram.exe
-  ```
+### Execution
 
----
-
-## 💻 Ví dụ chạy chương trình
-
-### Dữ liệu nhập:
-```text
-Nhap so chieu: 3
-Nhap toa do vecto: 1 2 3
-Nhap so chieu: 3
-Nhap toa do vecto: 4 5 6
+#### Linux / macOS
+```bash
+./vector_program
 ```
 
-### Kết quả xuất:
-```text
-Tich vo huong: 32
-Vecto 1 sau khi sua toa do dau tien: 99.9 2 3 
+#### Windows (Command Prompt / PowerShell)
+```cmd
+vector_program.exe
 ```
-*(Tích vô hướng: $1 \times 4 + 2 \times 5 + 3 \times 6 = 32$)*
+
+## Example Usage
+
+```cpp
+#include <iostream>
+#include "Vecto.h"
+
+int main() {
+    try {
+        Vecto v1, v2;
+
+        std::cout << "Input Vector 1:\n";
+        v1.Nhap();
+
+        std::cout << "Input Vector 2:\n";
+        v2.Nhap();
+
+        // Dot product calculation
+        double dot_product = v1 * v2;
+        std::cout << "Dot product: " << dot_product << std::endl;
+
+        // Subscript access and modification
+        v1[0] = 99.9;
+        std::cout << "Vector 1 after modifying first coordinate: ";
+        v1.Xuat();
+
+        // Vector arithmetic
+        Vecto v3 = v1 + v2;
+        std::cout << "Vector 1 + Vector 2: ";
+        v3.Xuat();
+
+    } catch (const std::exception& e) {
+        std::cerr << "Runtime Error: " << e.what() << std::endl;
+        return 1;
+    }
+
+    return 0;
+}
+```
