@@ -1,76 +1,66 @@
-# C++ Dynamic Vector Library (`vector-practice`)
+# C++ Vecto Class (OOP)
 
-Một thư viện lớp `Vecto` toán học trong C++ xử lý không gian n chiều, áp dụng các kỹ thuật quản lý bộ nhớ động nâng cao, chuẩn thiết kế hướng đối tượng (OOP) và xử lý ngoại lệ an toàn.
+Chương trình triển khai lớp đối tượng `Vecto` (Vector n chiều) trong C++ hỗ trợ cấp phát bộ nhớ động, quản lý tài nguyên an toàn theo chuẩn C++ (Rule of Three) và nạp chồng các toán tử cơ bản.
 
 ---
 
-## 🚀 Tính năng nổi bật
+## 📌 Tính năng chính
 
-- **Cấu trúc module hóa**: Phân tách rõ ràng giữa giao diện (`Vecto.h`) và cài đặt chi tiết (`Vecto.cpp`).
-- **Quy tắc 3 (Rule of Three)**: Hiện thực đầy đủ Constructor mặc định, Copy Constructor và Destructor nhằm ngăn ngừa rò rỉ bộ nhớ (memory leak).
-- **Copy-and-Swap Idiom**: Toán tử gán (`operator=`) đạt chuẩn Strong Exception Safety, tự động dọn dẹp tài nguyên và chống gán chính nó (`self-assignment`).
-- **Const-Correctness**: Hỗ trợ nạp chồng `operator[]` cả dạng đọc-ghi (`double&`) và dạng chỉ đọc (`const double&`).
-- **Xử lý ngoại lệ (Exception Handling)**: Bắt lỗi lệch số chiều toán học (`std::invalid_argument`) và truy cập ngoài vùng nhớ (`std::out_of_range`).
+- **Quản lý bộ nhớ động**: Khởi tạo vector với số chiều linh hoạt, giải phóng vùng nhớ tự động tránh rò rỉ bộ nhớ (Memory Leak).
+- **Copy Constructor & Copy Assignment Operator**: Áp dụng idiom Copy-and-Swap để sao chép sâu (Deep Copy) và gán đối tượng an toàn.
+- **Nạp chồng toán tử đại số**:
+  - `+`, `-`: Phép cộng, trừ hai vector cùng số chiều.
+  - `*`: Tích vô hướng (dot product) giữa hai vector.
+- **Truy cập phần tử qua chỉ mục**: Nạp chồng toán tử `[]` (cả bản non-const để sửa giá trị và const để đọc dữ liệu an toàn) có bắt lỗi vượt biên mảng (`std::out_of_range`).
+- **Xử lý ngoại lệ (Exception Handling)**: Bắt lỗi lệch số chiều, vector rỗng hoặc chỉ số ngoài phạm vi bằng ngoại lệ chuẩn C++ (`std::invalid_argument`, `std::out_of_range`).
 
 ---
 
 ## 📁 Cấu trúc thư mục
 
-```text
-├── Vecto.h        # Khai báo lớp Vecto (Interface)
-├── Vecto.cpp      # Cài đặt chi tiết các phương thức & toán tử
-├── main.cpp       # Chương trình kiểm thử logic và nạp chồng toán tử
-├── .gitignore     # Chặn các file nhị phân rác (*.exe, *.obj)
+```
+├── Vecto.h        # Khai báo lớp Vecto và các nguyên mẫu phương thức / toán tử
+├── Vecto.cpp      # Định nghĩa chi tiết các phương thức và nạp chồng toán tử
+├── main.cpp       # Mã kiểm thử tính năng (nhập, xuất, tính toán, bắt ngoại lệ)
 └── README.md      # Tài liệu hướng dẫn sử dụng
 ```
-🛠️ Hướng dẫn biên dịch & chạy
-Yêu cầu trình biên dịch hỗ trợ C++11 trở lên (như GCC, Clang, hoặc MSVC).
 
-1. Biên dịch qua Terminal (g++)
-Bash
-# Gom tất cả các file mã nguồn thành file chạy
-g++ *.cpp -o my_app
-2. Khởi chạy chương trình
-Windows:
+---
 
-PowerShell
-.\my_app.exe
-Linux / macOS:
+## 🛠️ Hướng dẫn biên dịch và chạy
 
-Bash
-./my_app
-💻 Mã nguồn mẫu (Usage Example)
-C++
-#include <iostream>
-#include "Vecto.h"
+Sử dụng trình biên dịch GCC/G++:
 
-int main() {
-    try {
-        Vecto v1(3), v2(3);
-        
-        // Gán giá trị bằng toán tử []
-        v1[0] = 1.0; v1[1] = 2.0; v1[2] = 3.0;
-        v2[0] = 4.0; v2[1] = 5.0; v2[2] = 6.0;
-
-        // Các phép toán vectơ
-        Vecto tong = v1 + v2;
-        double tich_vo_huong = v1 * v2;
-
-        std::cout << "Tong: ";
-        tong.Xuat();
-        std::cout << "Tich vo huong: " << tich_vo_huong << std::endl;
-
-    } catch (const std::exception& e) {
-        std::cerr << "Loi: " << e.what() << std::endl;
-    }
-    return 0;
-}
-👤 Tác giả
-GitHub: @Tristann172
-
-
-Sau khi tạo xong file này, bạn chỉ cần gõ cụm 3 lệnh quen thuộc để cập nhật lên GitHub:
+### 1. Biên dịch:
 ```bash
-git add .
-git commit -m "Them file README mo ta du an"
-git push
+g++ main.cpp Vecto.cpp -o VectoProgram -std=c++11
+```
+
+### 2. Thực thi:
+- **Trên Linux / macOS:**
+  ```bash
+  ./VectoProgram
+  ```
+- **Trên Windows (cmd / PowerShell):**
+  ```cmd
+  VectoProgram.exe
+  ```
+
+---
+
+## 💻 Ví dụ chạy chương trình
+
+### Dữ liệu nhập:
+```text
+Nhap so chieu: 3
+Nhap toa do vecto: 1 2 3
+Nhap so chieu: 3
+Nhap toa do vecto: 4 5 6
+```
+
+### Kết quả xuất:
+```text
+Tich vo huong: 32
+Vecto 1 sau khi sua toa do dau tien: 99.9 2 3 
+```
+*(Tích vô hướng: $1 \times 4 + 2 \times 5 + 3 \times 6 = 32$)*
